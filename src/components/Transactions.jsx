@@ -1,66 +1,59 @@
 import React, { useContext } from "react";
-
 import { TransactionContext } from "../context/TransactionContext";
-import testTransactions from "./testTransactions";
-
-
-import dummyData from "../utils/dummyData";
 import { shortenAddress } from "../utils/shortenAddress";
 
-const TransactionsCard = ({ keyword, addressFrom, addressTo, amount, message, timestamp }) => {
+const TransactionsCard = ({ timestamp, addressFrom, addressTo, amount, keyword, message }) => {
   return (
-    <div className="bg-[#181918] m-4 flex flex-col p-3 rounded-md hover:shadow-2xl">
-      <div className="flex flex-col items-center w-full mt-3">
-        <div className="display-flex justify-start w-full mb-6 p-2">
-          <a href={`https://sepolia.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
-            <p className="text-white text-base">From: {shortenAddress(addressFrom)}</p>
-          </a>
-          <a href={`https://sepolia.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
-            <p className="text-white text-base">To: {shortenAddress(addressTo)}</p>
-          </a>
-          <p className="text-white text-base">Amount: {amount} ETH</p>
-          {message && (
-            <>
-              <br />
-              <p className="text-white text-base">Message: {message}</p>
-            </>
-          )}
-          <p className="text-white text-base">Keyword: {keyword}</p>
+    <div className="bg-[#181918] p-3 rounded-md hover:shadow-2xl w-full border-b border-[#121212] mb-1">
+      <div className="flex flex-col items-start w-full">
+        <div className="flex justify-between w-full mb-0.5">
+          <p className="text-white text-sm">{timestamp}</p>
         </div>
-        <div className="bg-black p-3 px-5 w-max rounded-3xl -mt-5 shadow-2xl">
-          <p className="text-[#37c7da] font-bold">{timestamp}</p>
+        <div className="flex justify-between w-full mb-0.5">
+          <p className="text-white text-sm">DE: {(addressFrom)}</p>
+          <p className="text-white text-sm">-{amount} ETH</p>
+        </div>
+        <div className="flex justify-between w-full mb-0.5">
+          <p className="text-white text-sm">PARA: {(addressTo)}</p>
+          <p className="text-white text-sm">+{amount} ETH</p>
+        </div>
+        {keyword && (
+          <div className="flex justify-between w-full mb-0.5">
+            <p className="text-white text-sm">CONCEPTO: {keyword}</p>
+          </div>
+        )}
+        <div className="flex justify-between w-full mb-0.5">
+          <p className="text-white text-sm">MENSAJE: {message}</p>
         </div>
       </div>
     </div>
   );
 };
+
 const Transactions = () => {
-  
-    const { transactions, currentAccount } = useContext(TransactionContext);
-  
-    return (
-      <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
-        <div className="flex flex-col md:p-12 py-12 px-4">
-          {currentAccount ? (
-            <h3 className="text-white text-3xl text-center my-2">
-              ULTIMAS TRANSACCIONES
-            </h3>
-          ) : (
-            <h3 className="text-white text-3xl text-center my-2">
-              CONECTA TU CUENTA PARA VER LAS ULTIMAS TRANSACCIONES
-            </h3>
-          )}
-  
-          <div className="flex flex-wrap justify-center items-center mt-10">
-            {[...testTransactions, ...transactions].reverse().map((transaction, i) => (
-              <TransactionsCard key={i} {...transaction} />
-            ))}
-          </div>
+  const { transactions, currentAccount } = useContext(TransactionContext);
+
+  const reversedTransactions = transactions.slice().reverse();
+
+  return (
+    <div className="flex justify-center items-center w-full gradient-bg-transactions">
+      <div className="flex flex-col md:p-10 py-10 px-2">
+        {currentAccount ? (
+          <h3 className="text-white text-3xl text-center my-2">ULTIMAS TRANSACCIONES</h3>
+        ) : (
+          <h3 className="text-white text-3xl text-center my-2">CONECTA TU CUENTA PARA VER LAS ULTIMAS TRANSACCIONES</h3>
+        )}
+
+        <div className="flex flex-col items-center mt-10">
+          {reversedTransactions.map((transaction, index) => (
+            <div key={index} className="w-full">
+              <TransactionsCard {...transaction} />
+            </div>
+          ))}
         </div>
       </div>
-    );
-  };
-
+    </div>
+  );
+};
 
 export default Transactions;
-
