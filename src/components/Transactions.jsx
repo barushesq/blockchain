@@ -5,16 +5,20 @@ import { shortenAddress } from "../utils/shortenAddress";
 const TransactionsCard = ({ timestamp, addressFrom, addressTo, amount, keyword, message }) => {
   return (
     <div className="bg-[#181918] p-3 rounded-md hover:shadow-2xl w-full border-b border-[#121212] mb-1">
-      <div className="flex flex-col items-start w-full">
-        <div className="flex justify-between w-full mb-0.5">
+      <div className="flex flex-col items-start w-auto">
+        <div className="flex justify-between w-auto mb-0.5">
           <p className="text-white text-sm">{timestamp}</p>
         </div>
         <div className="flex justify-between w-full mb-0.5">
-          <p className="text-white text-sm">DE: {(addressFrom)}</p>
+        <a href={`https://sepolia.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
+            <p className="text-white text-base">From: {(addressFrom)}</p>
+          </a>
           <p className="text-white text-sm">-{amount} ETH</p>
         </div>
         <div className="flex justify-between w-full mb-0.5">
-          <p className="text-white text-sm">PARA: {(addressTo)}</p>
+        <a href={`https://sepolia.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
+            <p className="text-white text-base">To: {(addressTo)}</p>
+          </a>
           <p className="text-white text-sm">+{amount} ETH</p>
         </div>
         {keyword && (
